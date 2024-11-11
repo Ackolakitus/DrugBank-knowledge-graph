@@ -1156,7 +1156,7 @@ def number_of_properties(drug_xml, experimental_set, calculated_set):
         experimental_set.add(prop)
 
 def main():
-    load_dotenv()
+    # load_dotenv()
     # connection = ag_connect('diplomska-graph')
     connection = ag_connect('diplomska-graph', clear=True)
 
