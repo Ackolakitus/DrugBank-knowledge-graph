@@ -18,11 +18,7 @@ jobs:
 
       - name: Download latest DrugBank release
         run: |
-          download_url="https://go.drugbank.com/releases/5-1-12/downloads/all-full-database"
-          curl -Lfv -o drugbank_data.zip -u "${{ secrets.DRUGBANK_USERNAME }}:${{ secrets.DRUGBANK_PASSWORD }}" "$download_url" 
-        env:
-          DRUGBANK_USERNAME: ${{ secrets.DRUGBANK_USERNAME }}
-          DRUGBANK_PASSWORD: ${{ secrets.DRUGBANK_PASSWORD }}
+          curl -Lfv -o "full database.zip" -u ${{ secrets.DRUGBANK_USERNAME }}:${{ secrets.DRUGBANK_PASSWORD }} https://go.drugbank.com/releases/5-1-12/downloads/all-full-database 
 
       - name: Create data directory
         run: mkdir -p ./data
@@ -41,9 +37,9 @@ jobs:
 
       - name: Run the Python script
         env: 
-           AGRAPH_HOST: ${{ secrets.HOST }}
-           AGRAPH_PORT: ${{ secrets.PORT }}
-           AGRAPH_USER: ${{ secrets.USER }}
-           AGRAPH_PASSWORD: ${{ secrets.PASSWORD}}
+           AGRAPH_HOST: ${{ secrets.AGRAPH_HOST }}
+           AGRAPH_PORT: ${{ secrets.AGRAPH_PORT }}
+           AGRAPH_USER: ${{ secrets.AGRAPH_USER }}
+           AGRAPH_PASSWORD: ${{ secrets.AGRAPH_PASSWORD}}
         run: |
           python3 extract_and_create.py
