@@ -1,0 +1,48 @@
+name: Download, process and save DrugBank KG
+
+on:
+  workflow_dispatch:
+
+jobs:
+  download_and_extract:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up environment
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y unzip
+
+      - name: Download latest DrugBank release
+        env:
+          EMAIL: ${{ secrets.DRUGBANK_EMAIL }}
+          PASSWORD: ${{ secrets.DRUGBANK_PASSWORD }}
+        run: |
+          curl -Lf -o filename.zip -u $EMAIL:$PASSWORD -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36" https://go.drugbank.com/releases/5-1-12/downloads/all-full-database
+          
+      - name: Create data directory
+        run: mkdir -p ./data
+
+      - name: Extract DrugBank data
+        run: |
+          unzip -o filename.zip -d ./data/
+
+      - name: Readable permissions for the extracted files
+        run: |
+          chmod -R 755 ./data/
+
+      - name: Install dependencies
+        run: |
+          pip3 install rdflib agraph-python lxml python-dotenv
+
+      - name: Run the Python script
+        env: 
+           AGRAPH_HOST: ${{ secrets.AGRAPH_HOST }}
+           AGRAPH_PORT: ${{ secrets.AGRAPH_PORT }}
+           AGRAPH_USER: ${{ secrets.AGRAPH_USER }}
+           AGRAPH_PASSWORD: ${{ secrets.AGRAPH_PASSWORD}}
+        run: |
+          python3 extract_and_create.py

@@ -1,0 +1,42 @@
+# Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+
+
+# Virtual environments
+venv/
+env/
+.venv/
+.env/
+ENV/
+env.bak/
+venv.bak/
+
+.env
+.env.*
+
+
+.idea/
+*.iml
+*.iws
+
+# PyCharm working directories
+.idea/*
+!.idea/inspectionProfiles
+!.idea/codeStyles
+!.idea/vcs.xml
+!.idea/workspace.xml
+
+# System files
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+logs/
+*.pid
+
+proba/
+data/
+extracted_data/
