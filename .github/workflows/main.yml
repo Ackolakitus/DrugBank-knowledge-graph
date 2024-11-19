@@ -21,10 +21,10 @@ jobs:
 
       - name: Download latest DrugBank release
         env:
-          EMAIL: ${{ secrets.DRUGBANK_EMAIL }}
-          PASSWORD: ${{ secrets.DRUGBANK_PASSWORD }}
-        run: $username = ${EMAIL}
-             $password = ConvertTo-SecureString ${PASSWORD} -AsPlainText -Force
+          MAIL: ${{ secrets.DRUGBANK_EMAIL }}
+          PASS: ${{ secrets.DRUGBANK_PASSWORD }}
+        run: $username = ${MAIL}
+             $password = ConvertTo-SecureString ${PASS} -AsPlainText -Force
              $credential = New-Object System.Management.Automation.PSCredential($username, $password)
              $response = Invoke-WebRequest -Uri "https://go.drugbank.com/releases/5-1-12/downloads/all-full-database" `
              -Credential $credential `
