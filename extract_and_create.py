@@ -2,7 +2,6 @@ import json
 import re
 import sys
 import time
-import requests
 from datetime import date
 
 from dotenv import load_dotenv
@@ -1041,25 +1040,6 @@ def map_pathways_term_set(graph):
     graph.add((pathways_term_set, SDO.name, Literal("Pathways")))
     graph.add((pathways_term_set, SDO.description, Literal(
         "Metabolic, disease, and biological pathways that the drug is involved in, as identified by the Small Molecule Pathway Database (SMPDB).")))
-
-def update_fuseki_triplestore(graph):
-    query = """
-        INSERT DATA { %s }
-    """ % graph.serialize(format='nt')
-
-    headers = {
-        "Content-Type": "application/sparql-update"
-    }
-
-    response = requests.post(jena_update_url, data=query, headers=headers)
-
-    if response.status_code == 204:
-        print("Failed to add data:", response.text)
-        sys.exit(1)
-    else:
-
-        print("Data successfully added to the Jena triplestore.")
-
 
 def add_metadata(connection):
     drugbank = connection.createURI("https://finki.ukim.mk/drugbank")
