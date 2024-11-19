@@ -24,8 +24,8 @@ jobs:
           MAIL: ${{ secrets.DRUGBANK_EMAIL }}
           PASS: ${{ secrets.DRUGBANK_PASSWORD }}
         run: |
-             $username = "${MAIL}"
-             $password = ConvertTo-SecureString "${PASS}" -AsPlainText -Force
+             $username = $MAIL
+             $password = ConvertTo-SecureString $PASS -AsPlainText -Force
              $credential = New-Object System.Management.Automation.PSCredential($username, $password)
              $response = Invoke-WebRequest -Uri "https://go.drugbank.com/releases/5-1-12/downloads/all-full-database" ` -Credential $credential ` -UserAgent "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36" ` -OutFile "filename.zip"
           
