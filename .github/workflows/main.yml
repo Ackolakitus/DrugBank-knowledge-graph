@@ -23,7 +23,14 @@ jobs:
         env:
           EMAIL: ${{ secrets.DRUGBANK_EMAIL }}
           PASSWORD: ${{ secrets.DRUGBANK_PASSWORD }}
-        run: curl -Lf -o filename.zip -u ${EMAIL}:${PASSWORD} -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36" https://go.drugbank.com/releases/5-1-12/downloads/all-full-database
+        run: $username = ${EMAIL}
+             $password = ConvertTo-SecureString ${PASSWORD} -AsPlainText -Force
+             $credential = New-Object System.Management.Automation.PSCredential($username, $password)
+             $response = Invoke-WebRequest -Uri "https://go.drugbank.com/releases/5-1-12/downloads/all-full-database" `
+             -Credential $credential `
+             -Authentication Basic `
+             -UserAgent "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36" `
+             -OutFile "filename.zip"
           
       - name: Extract DrugBank data
         run: Expand-Archive -Path filename.zip -DestinationPath data
