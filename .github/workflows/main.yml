@@ -21,11 +21,11 @@ jobs:
           python-version: '3.12'
 
       - name: Download latest DrugBank release
-        # env:
-        #   EMAIL: ${{ secrets.DRUGBANK_EMAIL }}
-        #   PASSWORD: ${{ secrets.DRUGBANK_PASSWORD }}
+        env:
+          EMAIL: ${{ secrets.DRUGBANK_EMAIL }}
+          PASSWORD: ${{ secrets.DRUGBANK_PASSWORD }}
         run: |
-          curl -Lf -o filename.zip -u ${{secrets.DRUGBANK_EMAIL}}:${{ secrets.DRUGBANK_PASSWORD }} -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36" https://go.drugbank.com/releases/5-1-12/downloads/all-full-database
+          curl -Lf -o filename.zip -u ${EMAIL}:${PASSWORD} https://go.drugbank.com/releases/5-1-12/downloads/all-full-database
           
       - name: Create data directory
         run: mkdir -p ./data
