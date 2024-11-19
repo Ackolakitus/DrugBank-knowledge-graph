@@ -5,7 +5,7 @@ on:
 
 jobs:
   download_and_extract:
-    runs-on: windows-latest
+    runs-on: self-hosted
 
     steps:
       - name: Checkout repository
@@ -13,7 +13,8 @@ jobs:
 
       - name: Set up environment
         run: |
-          choco install unzip
+          sudo apt-get update
+          sudo apt-get install -y unzip
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -25,24 +26,28 @@ jobs:
           EMAIL: ${{ secrets.DRUGBANK_EMAIL }}
           PASSWORD: ${{ secrets.DRUGBANK_PASSWORD }}
         run: |
-          curl -Lf -o filename.zip -u ${EMAIL}:${PASSWORD} https://go.drugbank.com/releases/5-1-12/downloads/all-full-database
+          curl -Lf -o filename.zip -u $EMAIL:$PASSWORD https://go.drugbank.com/releases/5-1-12/downloads/all-full-database
           
       - name: Create data directory
         run: mkdir -p ./data
 
-      # - name: Extract DrugBank data
-      #   run: |
-      #     unzip -o filename.zip -d ./data/
+      - name: Extract DrugBank data
+        run: |
+          unzip -o filename.zip -d ./data/
 
-      # - name: Install dependencies
-      #   run: |
-      #     pip install rdflib agraph-python lxml python-dotenv
+      - name: Readable permissions for the extracted files
+        run: |
+          chmod -R 755 ./data/
 
-      # - name: Run the Python script
-      #   env: 
-      #      AGRAPH_HOST: ${{ secrets.AGRAPH_HOST }}
-      #      AGRAPH_PORT: ${{ secrets.AGRAPH_PORT }}
-      #      AGRAPH_USER: ${{ secrets.AGRAPH_USER }}
-      #      AGRAPH_PASSWORD: ${{ secrets.AGRAPH_PASSWORD}}
-      #   run: |
-      #     python extract_and_create.py
+      - name: Install dependencies
+        run: |
+          pip3 install rdflib agraph-python lxml python-dotenv
+
+      - name: Run the Python script
+        env: 
+           AGRAPH_HOST: ${{ secrets.AGRAPH_HOST }}
+           AGRAPH_PORT: ${{ secrets.AGRAPH_PORT }}
+           AGRAPH_USER: ${{ secrets.AGRAPH_USER }}
+           AGRAPH_PASSWORD: ${{ secrets.AGRAPH_PASSWORD}}
+        run: |
+          python3 extract_and_create.py
