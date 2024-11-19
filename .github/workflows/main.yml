@@ -5,7 +5,7 @@ on:
 
 jobs:
   download_and_extract:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
       - name: Checkout repository
@@ -13,8 +13,7 @@ jobs:
 
       - name: Set up environment
         run: |
-          sudo apt-get update
-          sudo apt-get install -y unzip
+          choco install unzip
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -22,26 +21,22 @@ jobs:
           python-version: '3.12'
 
       - name: Download latest DrugBank release
-        env:
-          EMAIL: ${{ secrets.DRUGBANK_EMAIL }}
-          PASSWORD: ${{ secrets.DRUGBANK_PASSWORD }}
+        # env:
+        #   EMAIL: ${{ secrets.DRUGBANK_EMAIL }}
+        #   PASSWORD: ${{ secrets.DRUGBANK_PASSWORD }}
         run: |
-          curl -Lf -o filename.zip -u ${EMAIL}:${PASSWORD} -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36" https://go.drugbank.com/releases/5-1-12/downloads/all-full-database
+          curl -Lf -o filename.zip -u ${{secrets.DRUGBANK_EMAIL}}:${{ secrets.DRUGBANK_PASSWORD }} -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36" https://go.drugbank.com/releases/5-1-12/downloads/all-full-database
           
       - name: Create data directory
         run: mkdir -p ./data
 
-      - name: Extract DrugBank data
-        run: |
-          unzip -o filename.zip -d ./data/
-
-      - name: Readable permissions for the extracted files
-        run: |
-          chmod -R 755 ./data/
+      # - name: Extract DrugBank data
+      #   run: |
+      #     unzip -o filename.zip -d ./data/
 
       # - name: Install dependencies
       #   run: |
-      #     pip3 install rdflib agraph-python lxml python-dotenv
+      #     pip install rdflib agraph-python lxml python-dotenv
 
       # - name: Run the Python script
       #   env: 
