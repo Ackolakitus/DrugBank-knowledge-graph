@@ -11,9 +11,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up environment
-        run: |
-          choco install unzip
+      - name: Create data directory
+        run: New-Item -ItemType Directory -Path data
           
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -24,12 +23,10 @@ jobs:
         env:
           EMAIL: ${{ secrets.DRUGBANK_EMAIL }}
           PASSWORD: ${{ secrets.DRUGBANK_PASSWORD }}
-        run: |
-          curl -Lf -o filename.zip -u ${EMAIL}:${PASSWORD} -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36" https://go.drugbank.com/releases/5-1-12/downloads/all-full-database
+        run: curl -Lf -o filename.zip -u ${EMAIL}:${PASSWORD} -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36" https://go.drugbank.com/releases/5-1-12/downloads/all-full-database
           
-      - name: Create data directory
-        run: mkdir -p ./data
-
+      - name: Extract DrugBank data
+        run: Expand-Archive -Path filename.zip -DestinationPath data
       # - name: Extract DrugBank data
       #   run: |
       #     unzip -o filename.zip -d ./data/
