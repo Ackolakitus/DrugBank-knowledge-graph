@@ -5,7 +5,7 @@ on:
 
 jobs:
   download_and_extract:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
@@ -13,7 +13,8 @@ jobs:
 
       - name: Set up environment
         run: |
-          choco install unzip
+          sudo apt-get update
+          sudo apt-get install -y unzip
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -25,7 +26,7 @@ jobs:
           EMAIL: ${{ secrets.DRUGBANK_EMAIL }}
           PASSWORD: ${{ secrets.DRUGBANK_PASSWORD }}
         run: |
-          curl -Lf -o filename.zip -u $EMAIL:$PASSWORD -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36" https://go.drugbank.com/releases/5-1-12/downloads/all-full-database
+          curl -Lf -o filename.zip -u ${EMAIL}:${PASSWORD} -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36" https://go.drugbank.com/releases/5-1-12/downloads/all-full-database
           
       - name: Create data directory
         run: mkdir -p ./data
