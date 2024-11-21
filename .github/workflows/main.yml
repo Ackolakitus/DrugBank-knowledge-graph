@@ -20,17 +20,19 @@ jobs:
           python-version: '3.12'
 
       - name: Download latest DrugBank release
+      - shell: pwsh
+        env:
+          MAIL: ${{ secrets.DRUGBANK_EMAIL}}
+          PASS: ${{ secrets.DRUGBANK_PASSWORD }}
         run: |
-          $username = ${{ secrets.DRUGBANK_EMAIL }}
-          $password = ${{ secrets.DRUGBANK_PASSWORD }}
+          $username = "$env:MAIL"
+          $password = "$env:PASS"
           $url = "https://go.drugbank.com/releases/5-1-12/downloads/all-full-database"
           $output = "filename.zip"
-        
           $securePassword = ConvertTo-SecureString $password -AsPlainText -Force
           $credential = New-Object System.Management.Automation.PSCredential($username, $securePassword)
-        
           Invoke-WebRequest -Uri $url -Credential $credential -OutFile $output
-          shell: pwsh
+          
         
       - name: Extract DrugBank data
         run: Expand-Archive -Path filename.zip -DestinationPath data
