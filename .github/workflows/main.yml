@@ -5,7 +5,7 @@ on:
 
 jobs:
   download_and_extract:
-    runs-on: Windows
+    runs-on: windows-latest
 
     steps:
 
@@ -17,8 +17,7 @@ jobs:
         env:
          MAIL: ${{ secrets.DRUGBANK_EMAIL}}
          PASS: ${{ secrets.DRUGBANK_PASSWORD }}
-        run: |
-         curl -Lf -o filename.zip -u %MAIL%:%PASS% -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36" https://go.drugbank.com/releases/5-1-12/downloads/all-full-database
+        run: curl -Lf -o filename.zip -u %MAIL%:%PASS% -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36" https://go.drugbank.com/releases/5-1-12/downloads/all-full-database
 
       - name: Extract DrugBank data
         shell: powershell
