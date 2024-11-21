@@ -20,7 +20,7 @@ jobs:
           python-version: '3.12'
 
       - name: Download latest DrugBank release
-      - shell: pwsh
+        shell: pwsh
         env:
           MAIL: ${{ secrets.DRUGBANK_EMAIL}}
           PASS: ${{ secrets.DRUGBANK_PASSWORD }}
