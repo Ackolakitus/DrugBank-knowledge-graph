@@ -5,7 +5,7 @@ on:
 
 jobs:
   download_and_extract:
-    runs-on: Windows
+    runs-on: windows-latest
 
     steps:
     
