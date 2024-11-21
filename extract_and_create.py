@@ -1138,7 +1138,7 @@ def number_of_properties(drug_xml, experimental_set, calculated_set):
 def main():
     # load_dotenv()
     # connection = ag_connect('diplomska-graph')
-    connection = ag_connect('diplomska-graph', clear=True)
+    connection = ag_connect('diplomska-graph', create=True, clear=True)
 
     drugbank = connection.createURI("https://finki.ukim.mk/drugbank")
 
