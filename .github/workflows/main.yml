@@ -20,12 +20,9 @@ jobs:
           python-version: '3.12'
 
       - name: Download latest DrugBank release
-        env:
-          MAIL: ${{ secrets.DRUGBANK_EMAIL }}
-          PASS: ${{ secrets.DRUGBANK_PASSWORD }}
         run: |
-          $username = "${MAIL}"
-          $password = "${PASS}"
+          $username = ${{ secrets.DRUGBANK_EMAIL }}
+          $password = ${{ secrets.DRUGBANK_PASSWORD }}
           $url = "https://go.drugbank.com/releases/5-1-12/downloads/all-full-database"
           $output = "filename.zip"
         
