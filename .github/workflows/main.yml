@@ -8,34 +8,39 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Create data directory
-        run: New-Item -ItemType Directory -Path data
-          
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-
-      - name: Download latest DrugBank release
+      - name: Run a script with pwsh in a specific step
         shell: pwsh
-        env:
-          MAIL: ${{ secrets.DRUGBANK_EMAIL}}
-          PASS: ${{ secrets.DRUGBANK_PASSWORD }}
-        run: |
-          $username = "$env:MAIL"
-          $password = "$env:PASS"
-          $url = "https://go.drugbank.com/releases/5-1-12/downloads/all-full-database"
-          $output = "filename.zip"
-          $securePassword = ConvertTo-SecureString $password -AsPlainText -Force
-          $credential = New-Object System.Management.Automation.PSCredential($username, $securePassword)
-          Invoke-WebRequest -Uri $url -Credential $credential -OutFile $output
+        run: Write-Host "This step specifically uses pwsh as its shell."
+      # - name: Checkout repository
+      #   uses: actions/checkout@v4
+
+      # - name: Create data directory
+      #   run: New-Item -ItemType Directory -Path data
+          
+      # - name: Set up Python
+      #   uses: actions/setup-python@v5
+      #   with:
+      #     python-version: '3.12'
+
+      # - name: Download latest DrugBank release
+      #   shell: pwsh
+      #   env:
+      #     MAIL: ${{ secrets.DRUGBANK_EMAIL}}
+      #     PASS: ${{ secrets.DRUGBANK_PASSWORD }}
+      #   run: |
+      #     $username = "$env:MAIL"
+      #     $password = "$env:PASS"
+      #     $url = "https://go.drugbank.com/releases/5-1-12/downloads/all-full-database"
+      #     $output = "filename.zip"
+      #     $securePassword = ConvertTo-SecureString $password -AsPlainText -Force
+      #     $credential = New-Object System.Management.Automation.PSCredential($username, $securePassword)
+      #     Invoke-WebRequest -Uri $url -Credential $credential -OutFile $output
           
         
-      - name: Extract DrugBank data
-        run: Expand-Archive -Path filename.zip -DestinationPath data
+      # - name: Extract DrugBank data
+      #   run: Expand-Archive -Path filename.zip -DestinationPath data
+
+        
       # - name: Extract DrugBank data
       #   run: |
       #     unzip -o filename.zip -d ./data/
