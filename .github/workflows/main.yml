@@ -24,7 +24,7 @@ jobs:
           MAIL: ${{ secrets.DRUGBANK_EMAIL }}
           PASS: ${{ secrets.DRUGBANK_PASSWORD }}
         run: |
-             $pair = "$MAIL:$PASS"
+             $pair = "${MAIL}:${PASS}"
              $credentials [System.Convert]::ToBase64String([System.Text.Encoding]::ASCII.GetBytes($pair))
              $headers = @{ Authorization = "Basic $credentials"}
              $useragent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36"
