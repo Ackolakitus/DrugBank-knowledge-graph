@@ -23,6 +23,7 @@ jobs:
         env:
           MAIL: ${{ secrets.DRUGBANK_EMAIL }}
           PASS: ${{ secrets.DRUGBANK_PASSWORD }}
+        shell: pwsh
         run: |
              $secpasswd = ConvertTo-SecureString ${PASS} -AsPlainText -Force
              $credentials New-Object System.Management.Automation.PSCredential(${MAIL}, $secpasswd)
