@@ -23,18 +23,12 @@ jobs:
           python-version: '3.12'
 
       - name: Download latest DrugBank release
-        shell: powershell
+        shell: cmd
         env:
           MAIL: ${{ secrets.DRUGBANK_EMAIL}}
           PASS: ${{ secrets.DRUGBANK_PASSWORD }}
         run: |
-          $username = "$env:MAIL"
-          $password = "$env:PASS"
-          $url = "https://go.drugbank.com/releases/5-1-12/downloads/all-full-database"
-          $output = "filename.zip"
-          $securePassword = ConvertTo-SecureString $password -AsPlainText -Force
-          $credential = New-Object System.Management.Automation.PSCredential($username, $securePassword)
-          Invoke-WebRequest -Uri $url -Credential $credential -OutFile $output
+          curl -Lfv -o filename.zip -u %MAIL%:%PASS% -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36" https://go.drugbank.com/releases/5-1-12/downloads/all-full-database
           
         
       # - name: Extract DrugBank data
