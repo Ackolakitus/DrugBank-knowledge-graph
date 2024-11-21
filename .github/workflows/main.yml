@@ -5,11 +5,11 @@ on:
 
 jobs:
   download_and_extract:
-    runs-on: self-hosted
+    runs-on: Windows
 
     steps:
       - name: Run a script with pwsh in a specific step
-        shell: pwsh
+        shell: powershell
         run: Write-Host "This step specifically uses pwsh as its shell."
       # - name: Checkout repository
       #   uses: actions/checkout@v4
