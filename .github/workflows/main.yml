@@ -8,14 +8,11 @@ jobs:
     runs-on: Windows
 
     steps:
-      # - name: Run a script with pwsh in a specific step
-      #   shell: powershell
-      #   run: Write-Host "This step specifically uses pwsh as its shell."
       - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Create data directory
-        run: New-Item -ItemType Directory -Path data
+        run: mkdir -p ./data
           
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -28,16 +25,15 @@ jobs:
           MAIL: ${{ secrets.DRUGBANK_EMAIL}}
           PASS: ${{ secrets.DRUGBANK_PASSWORD }}
         run: |
-          curl -Lfv -o filename.zip -u %MAIL%:%PASS% -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36" https://go.drugbank.com/releases/5-1-12/downloads/all-full-database
-          
-        
-      # - name: Extract DrugBank data
-      #   run: Expand-Archive -Path filename.zip -DestinationPath data
-
-        
+          curl -Lf -o filename.zip -u %MAIL%:%PASS% -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36" https://go.drugbank.com/releases/5-1-12/downloads/all-full-database
+                  
+      - name: Extract DrugBank data
+        run: 7z x filename.zip -o "data" -y
+     
       # - name: Extract DrugBank data
       #   run: |
       #     unzip -o filename.zip -d ./data/
+          
       # - name: Install dependencies
       #   run: |
       #     pip install rdflib agraph-python lxml python-dotenv
