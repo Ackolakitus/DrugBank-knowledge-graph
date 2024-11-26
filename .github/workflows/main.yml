@@ -1,3 +1,48 @@
+# name: Download, process and save DrugBank KG
+
+# on:
+#   workflow_dispatch:
+
+# jobs:
+#   download_and_extract:
+#     runs-on: Windows
+
+#     steps:
+
+#       - name: Checkout repository
+#         uses: actions/checkout@v4
+
+#       - name: Download latest DrugBank release
+#         shell: cmd
+#         env:
+#          MAIL: ${{ secrets.DRUGBANK_EMAIL}}
+#          PASS: ${{ secrets.DRUGBANK_PASSWORD }}
+#         run: curl -Lf -o filename.zip -u %MAIL%:%PASS% -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36" https://go.drugbank.com/releases/5-1-12/downloads/all-full-database
+
+#       - name: Extract DrugBank data
+#         shell: powershell
+#         run: Expand-Archive -Path "filename.zip" -DestinationPath "./data/"
+
+#       - name: Set up Python
+#         uses: actions/setup-python@v5
+#         with:
+#          python-version: '3.12'
+#          cache: 'pip'
+
+#       - name: Install dependencies
+#         run: |
+#          python -m pip install --upgrade pip
+#          pip install setuptools rdflib agraph-python lxml python-dotenv
+
+#       - name: Run the Python script
+#         env:
+#            AGRAPH_HOST: ${{ secrets.AGRAPH_HOST }}
+#            AGRAPH_PORT: ${{ secrets.AGRAPH_PORT }}
+#            AGRAPH_USER: ${{ secrets.AGRAPH_USER }}
+#            AGRAPH_PASSWORD: ${{ secrets.AGRAPH_PASSWORD}}
+#         run: |
+#           python extract_and_create.py
+
 name: Download, process and save DrugBank KG
 
 on:
@@ -5,40 +50,51 @@ on:
 
 jobs:
   download_and_extract:
-    runs-on: Windows
+    runs-on: ubuntu-latest
 
     steps:
-
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Download latest DrugBank release
-        shell: cmd
-        env:
-         MAIL: ${{ secrets.DRUGBANK_EMAIL}}
-         PASS: ${{ secrets.DRUGBANK_PASSWORD }}
-        run: curl -Lf -o filename.zip -u %MAIL%:%PASS% -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36" https://go.drugbank.com/releases/5-1-12/downloads/all-full-database
-
-      - name: Extract DrugBank data
-        shell: powershell
-        run: Expand-Archive -Path "filename.zip" -DestinationPath "./data/"
+      - name: Set up environment
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y unzip
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-         python-version: '3.12'
-         cache: 'pip'
+          python-version: '3.12'
+
+      - name: Download latest DrugBank release
+        env:
+          EMAIL: ${{ secrets.DRUGBANK_EMAIL }}
+          PASSWORD: ${{ secrets.DRUGBANK_PASSWORD }}
+        run: |
+          sudo curl -Lf -o filename.zip -u "${EMAIL}":"${PASSWORD}" https://go.drugbank.com/releases/5-1-12/downloads/all-full-database
+      - name: Create data directory
+        run: mkdir -p ./data
+
+      - name: Extract DrugBank data
+        run: |
+          unzip -o filename.zip -d ./data/
+
+      - name: Readable permissions for the extracted files
+        run: |
+          chmod -R 755 ./data/
 
       - name: Install dependencies
         run: |
-         python -m pip install --upgrade pip
-         pip install setuptools rdflib agraph-python lxml python-dotenv
+          pip install rdflib agraph-python lxml python-dotenv
 
       - name: Run the Python script
-        env:
+        env: 
            AGRAPH_HOST: ${{ secrets.AGRAPH_HOST }}
            AGRAPH_PORT: ${{ secrets.AGRAPH_PORT }}
            AGRAPH_USER: ${{ secrets.AGRAPH_USER }}
            AGRAPH_PASSWORD: ${{ secrets.AGRAPH_PASSWORD}}
         run: |
           python extract_and_create.py
+
+
+
