@@ -95,7 +95,7 @@ jobs:
            AGRAPH_USER: ${{ secrets.AGRAPH_USER }}
            AGRAPH_PASSWORD: ${{ secrets.AGRAPH_PASSWORD}}
         run: |
-          python extract_and_create.py
+          sudo python extract_and_create.py
 
 
 
