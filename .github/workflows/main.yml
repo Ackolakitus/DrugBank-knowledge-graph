@@ -60,7 +60,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y unzip
-          apt-get install ca-certificates
+          sudo apt-get install ca-certificates
           
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -82,7 +82,7 @@ jobs:
 
       - name: Readable permissions for the extracted files
         run: |
-          chmod -R 755 ./data/
+          sudo chmod -R 755 ./data/
 
       # - name: Install dependencies
       #   run: |
