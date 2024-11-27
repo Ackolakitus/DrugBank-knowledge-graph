@@ -464,7 +464,7 @@ def map_salts(drug_xml, graph, drug):
 
     for s in salts:
         if s.get('drugbank-id') is not None:
-            salt = URIRef(f'https://go.drugbank.com/salts/{s.get('drugbank-id')}')
+            salt = URIRef(f'https://go.drugbank.com/salts/{s.get("drugbank-id")}')
             graph.add((drug, SDO.hasBioChemEntityPart, salt))
 
             graph.add((salt, RDF.type, SDO.MolecularEntity))
@@ -581,7 +581,7 @@ def map_drug_pathways(drug_xml, graph, drug):
     for pathway in drug_pathways:
         # category = pathway.get('category').replace("_","+").title()
         if pathway.get('smpdb-id') is not None:
-            pathway_term = URIRef(f'https://smpdb.ca/view/{pathway.get('smpdb-id')}')
+            pathway_term = URIRef(f'https://smpdb.ca/view/{pathway.get("smpdb-id")}')
             graph.add((pathway_term, RDF.type, SDO.DefinedTerm))
             graph.add((pathway_term, SDO.inDefinedTermSet, pathways_term_set))
             graph.add((pathway_term, SDO.name, Literal(pathway.get('name'))))
@@ -670,7 +670,7 @@ def map_general_references(drug_xml, graph, entity, starting_tag='drugbank:gener
 
     for article in references.get('articles'):
         if article.get('pubmed-id') is not None:
-            uri = URIRef(f'https://pubmed.ncbi.nlm.nih.gov/{article.get('pubmed-id')}/')
+            uri = URIRef(f'https://pubmed.ncbi.nlm.nih.gov/{article.get("pubmed-id")}/')
             graph.add((uri, RDF.type, SDO.CreativeWork))
             graph.add((uri, SDO.about, entity))
             graph.add((entity, SDO.subjectOf, uri))
@@ -682,7 +682,7 @@ def map_general_references(drug_xml, graph, entity, starting_tag='drugbank:gener
 
     for textbook in references.get('textbooks'):
         if textbook.get('isbn') is not None:
-            uri = URIRef(f'{textbook.get('isbn').replace(" ", "-")}/')
+            uri = URIRef(f'{textbook.get("isbn").replace(" ", "-")}/')
             graph.add((uri, RDF.type, SDO.CreativeWork))
             graph.add((uri, SDO.about, entity))
             graph.add((entity, SDO.subjectOf, uri))
