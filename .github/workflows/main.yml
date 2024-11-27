@@ -60,7 +60,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y unzip
-          sudo apt-get install ca-certificates
+          apt-get install ca-certificates
           
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -84,9 +84,9 @@ jobs:
         run: |
           chmod -R 755 ./data/
 
-      - name: Install dependencies
-        run: |
-          sudo pip install setuptools rdflib agraph-python pycurl lxml python-dotenv
+      # - name: Install dependencies
+      #   run: |
+      #     pip install setuptools rdflib agraph-python pycurl lxml python-dotenv
 
       - name: Run the Python script
         env: 
@@ -95,7 +95,8 @@ jobs:
            AGRAPH_USER: ${{ secrets.AGRAPH_USER }}
            AGRAPH_PASSWORD: ${{ secrets.AGRAPH_PASSWORD}}
         run: |
-          sudo python extract_and_create.py
+          pip install setuptools rdflib agraph-python pycurl lxml python-dotenv
+          python extract_and_create.py
 
 
 
