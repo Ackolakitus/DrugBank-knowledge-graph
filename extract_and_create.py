@@ -4,7 +4,6 @@ import sys
 import time
 from datetime import date
 
-from dotenv import load_dotenv
 from rdflib import Graph, URIRef, Literal, BNode
 from rdflib.namespace import SDO, RDF
 import lxml.etree as ET
@@ -1136,8 +1135,6 @@ def number_of_properties(drug_xml, experimental_set, calculated_set):
         experimental_set.add(prop)
 
 def main():
-    # load_dotenv()
-    # connection = ag_connect('diplomska-graph')
     connection = ag_connect('diplomska-graph', create=True, clear=True)
 
     drugbank = connection.createURI("https://finki.ukim.mk/drugbank")
