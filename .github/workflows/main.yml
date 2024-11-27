@@ -86,7 +86,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install setuptools rdflib agraph-python pycurl lxml python-dotenv
+          sudo pip install setuptools rdflib agraph-python pycurl lxml python-dotenv
 
       - name: Run the Python script
         env: 
