@@ -23,3 +23,7 @@ This repository contains a Python script for transforming data from the DrugBank
 3. Download the latest release of [DrugBank](https://go.drugbank.com/releases) XML (all drugs) file.
 
 4. Run the script `python extract_and_create.py`
+
+## Note
+
+Check the GitHub Actions workflow for automation of the whole process.
